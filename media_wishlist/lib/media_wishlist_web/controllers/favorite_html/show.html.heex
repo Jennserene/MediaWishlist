@@ -1,0 +1,16 @@
+<.header>
+  Favorite <%= @favorite.id %>
+  <:subtitle>This is a favorite record from your database.</:subtitle>
+  <:actions>
+    <.link href={~p"/favorites/#{@favorite}/edit"}>
+      <.button>Edit favorite</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Name"><%= @favorite.name %></:item>
+  <:item title="Cheapest price"><%= @favorite.cheapest_price %></:item>
+</.list>
+
+<.back navigate={~p"/favorites"}>Back to favorites</.back>
