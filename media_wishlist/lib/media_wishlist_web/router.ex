@@ -84,4 +84,11 @@ defmodule MediaWishlistWeb.Router do
       live "/users/confirm", UserConfirmationInstructionsLive, :new
     end
   end
+
+  scope "/search", MediaWishlistWeb do
+    pipe_through [:browser, :require_authenticated_user]
+
+    get "/", SearchController, :start
+    post "/", SearchController, :results
+  end
 end

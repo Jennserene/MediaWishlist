@@ -8,7 +8,8 @@
 import Config
 
 config :media_wishlist,
-  ecto_repos: [MediaWishlist.Repo]
+  ecto_repos: [MediaWishlist.Repo],
+  ebay_api_token: System.get_env("EBAY_API_TOKEN")
 
 # Configures the endpoint
 config :media_wishlist, MediaWishlistWeb.Endpoint,
@@ -58,6 +59,8 @@ config :logger, :console,
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
+
+config :oauth2, debug: true
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

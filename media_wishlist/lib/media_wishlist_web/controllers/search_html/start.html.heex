@@ -1,0 +1,5 @@
+<h1>Search for books on ebay</h1>
+<%= form_for @conn.params["search"] || %{}, ~p"/search", [as: :search], fn f -> %>
+  <%= text_input f, :search_term %>
+  <%= submit "Search" %>
+<% end %>
