@@ -4,8 +4,8 @@ defmodule EbayApi do
   def new do
     OAuth2.Client.new([
       strategy: __MODULE__,
-      client_id: "SereneHe-mediawis-PRD-5cd6d2723-83b4195d",
-      client_secret: "PRD-cd6d2723b636-28ce-4251-a630-1aa3",
+      client_id: "EBAY_ID",
+      client_secret: "EBAY_SECRET",
       redirect_uri: "http://localhost:4000/search",
       site: "https://auth.ebay.com/oauth2/authorize?"
     ])
