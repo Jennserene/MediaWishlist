@@ -1,0 +1,10 @@
+<h1>Search for deals on games</h1>
+<%= form_for @conn.params["search"] || %{}, ~p"/search", [as: :search], fn f -> %>
+  <%= text_input f, :search_term %>
+  <%= submit "Search" %>
+<% end %>
+
+<%= if @search_results != nil do %>
+  <p>Something goes here</p>
+  <p><%= @search_results %></p>
+<% end %>
