@@ -6,6 +6,7 @@ defmodule MediaWishlistWeb.SearchController do
   end
 
   def results(conn, %{"search" => %{"search_term" => search_term}}) do
-    render(conn, :results, search_results: search_term)
+    result = CheapSharkApi.search_deals(search_term)
+    render(conn, :results, search_results: result)
   end
 end
