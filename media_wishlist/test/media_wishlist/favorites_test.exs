@@ -8,7 +8,7 @@ defmodule MediaWishlist.FavoritesTest do
 
     import MediaWishlist.FavoritesFixtures
 
-    @invalid_attrs %{currPrice: nil, dealID: nil, gameID: nil, metacriticLink: nil, onSale: nil, steamAppID: nil, storeID: nil, thumb: nil, title: nil}
+    @invalid_attrs %{currPrice: nil, retailPrice: nil, dealID: nil, gameID: nil, metacriticLink: nil, onSale: nil, steamAppID: nil, storeID: nil, thumb: nil, title: nil}
 
     test "list_favorites/0 returns all favorites" do
       favorite = favorite_fixture()
@@ -21,10 +21,11 @@ defmodule MediaWishlist.FavoritesTest do
     end
 
     test "create_favorite/1 with valid data creates a favorite" do
-      valid_attrs = %{currPrice: 42, dealID: "some dealID", gameID: "some gameID", metacriticLink: "some metacriticLink", onSale: true, steamAppID: "some steamAppID", storeID: "some storeID", thumb: "some thumb", title: "some title"}
+      valid_attrs = %{currPrice: "42.99", retailPrice: "24.99", dealID: "some dealID", gameID: "some gameID", metacriticLink: "some metacriticLink", onSale: true, steamAppID: "some steamAppID", storeID: "some storeID", thumb: "some thumb", title: "some title"}
 
       assert {:ok, %Favorite{} = favorite} = Favorites.create_favorite(valid_attrs)
-      assert favorite.currPrice == 42
+      assert favorite.currPrice == "42.99"
+      assert favorite.retailPrice == "24.99"
       assert favorite.dealID == "some dealID"
       assert favorite.gameID == "some gameID"
       assert favorite.metacriticLink == "some metacriticLink"
@@ -41,10 +42,11 @@ defmodule MediaWishlist.FavoritesTest do
 
     test "update_favorite/2 with valid data updates the favorite" do
       favorite = favorite_fixture()
-      update_attrs = %{currPrice: 43, dealID: "some updated dealID", gameID: "some updated gameID", metacriticLink: "some updated metacriticLink", onSale: false, steamAppID: "some updated steamAppID", storeID: "some updated storeID", thumb: "some updated thumb", title: "some updated title"}
+      update_attrs = %{currPrice: "43.99", retailPrice: "34.99", dealID: "some updated dealID", gameID: "some updated gameID", metacriticLink: "some updated metacriticLink", onSale: false, steamAppID: "some updated steamAppID", storeID: "some updated storeID", thumb: "some updated thumb", title: "some updated title"}
 
       assert {:ok, %Favorite{} = favorite} = Favorites.update_favorite(favorite, update_attrs)
-      assert favorite.currPrice == 43
+      assert favorite.currPrice == "43.99"
+      assert favorite.retailPrice == "34.99"
       assert favorite.dealID == "some updated dealID"
       assert favorite.gameID == "some updated gameID"
       assert favorite.metacriticLink == "some updated metacriticLink"

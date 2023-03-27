@@ -1,9 +1,11 @@
 defmodule MediaWishlist.Favorites.Favorite do
   use Ecto.Schema
   import Ecto.Changeset
+  alias MediaWishlist.Accounts.User
 
   schema "favorites" do
-    field :currPrice, :integer
+    field :currPrice, :string
+    field :retailPrice, :string
     field :dealID, :string
     field :gameID, :string
     field :metacriticLink, :string
@@ -12,7 +14,8 @@ defmodule MediaWishlist.Favorites.Favorite do
     field :storeID, :string
     field :thumb, :string
     field :title, :string
-    field :user_id, :id
+    # field :user_id, :id
+    belongs_to :user, User
 
     timestamps()
   end
@@ -20,7 +23,7 @@ defmodule MediaWishlist.Favorites.Favorite do
   @doc false
   def changeset(favorite, attrs) do
     favorite
-    |> cast(attrs, [:title, :metacriticLink, :dealID, :storeID, :gameID, :steamAppID, :currPrice, :onSale, :thumb])
-    |> validate_required([:title, :metacriticLink, :dealID, :storeID, :gameID, :steamAppID, :currPrice, :onSale, :thumb])
+    |> cast(attrs, [:title, :metacriticLink, :dealID, :storeID, :gameID, :steamAppID, :currPrice, :retailPrice, :onSale, :thumb, :user_id])
+    |> validate_required([:title, :dealID, :storeID, :gameID, :currPrice, :retailPrice, :onSale, :thumb])
   end
 end

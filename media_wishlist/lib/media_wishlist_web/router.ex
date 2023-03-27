@@ -84,9 +84,16 @@ defmodule MediaWishlistWeb.Router do
   end
 
   scope "/", MediaWishlistWeb do
-    pipe_through [:browser, :require_authenticated_user]
+    pipe_through [:browser]
 
     resources "/favorites", FavoriteController
+  end
+
+  scope "/wishlist", MediaWishlistWeb do
+    pipe_through [:browser, :require_authenticated_user]
+
+    post "/new", WishlistController, :new
+    get "/", WishlistController, :view
   end
 
   scope "/search", MediaWishlistWeb do

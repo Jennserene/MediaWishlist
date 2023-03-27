@@ -3,9 +3,9 @@ defmodule MediaWishlistWeb.FavoriteControllerTest do
 
   import MediaWishlist.FavoritesFixtures
 
-  @create_attrs %{currPrice: 42, dealID: "some dealID", gameID: "some gameID", metacriticLink: "some metacriticLink", onSale: true, steamAppID: "some steamAppID", storeID: "some storeID", thumb: "some thumb", title: "some title"}
-  @update_attrs %{currPrice: 43, dealID: "some updated dealID", gameID: "some updated gameID", metacriticLink: "some updated metacriticLink", onSale: false, steamAppID: "some updated steamAppID", storeID: "some updated storeID", thumb: "some updated thumb", title: "some updated title"}
-  @invalid_attrs %{currPrice: nil, dealID: nil, gameID: nil, metacriticLink: nil, onSale: nil, steamAppID: nil, storeID: nil, thumb: nil, title: nil}
+  @create_attrs %{currPrice: "42.99", retailPrice: "24.99", dealID: "some dealID", gameID: "some gameID", metacriticLink: "some metacriticLink", onSale: true, steamAppID: "some steamAppID", storeID: "some storeID", thumb: "some thumb", title: "some title"}
+  @update_attrs %{currPrice: "43.99", retailPrice: "34.99", dealID: "some updated dealID", gameID: "some updated gameID", metacriticLink: "some updated metacriticLink", onSale: false, steamAppID: "some updated steamAppID", storeID: "some updated storeID", thumb: "some updated thumb", title: "some updated title"}
+  @invalid_attrs %{currPrice: nil, retailPrice: nil, dealID: nil, gameID: nil, metacriticLink: nil, onSale: nil, steamAppID: nil, storeID: nil, thumb: nil, title: nil}
 
   describe "index" do
     test "lists all favorites", %{conn: conn} do

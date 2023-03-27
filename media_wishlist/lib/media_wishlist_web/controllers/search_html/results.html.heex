@@ -1,4 +1,4 @@
-<h1>Search for deals on games</h1>
+<h1>Search for the lowest prices on games</h1>
 <%= form_for @conn.params["search"] || %{}, ~p"/search", [as: :search], fn f -> %>
   <%= text_input f, :search_term %>
   <%= submit "Search", class: "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" %>
@@ -6,10 +6,13 @@
 
 <%= for game <- @search_results do %>
   <div class="flex flex-row m-2 space-x-2 items-center">
+    <%= form_for @conn.params["game"] || %{}, ~p"/wishlist/new", [as: :game], fn f -> %>
+      <%= hidden_input f, :dealID, value: game.cheapestDealID %>
+      <%= submit "Add" %>
+    <% end %>
     <div class="border-black border-l-2 p-1">Title: <%= game.external %></div>
     <div>Price: <%= game.cheapest %></div>
-    <%=
-      link("This Deal",
+    <%= link("This Deal",
       to: URI.parse("https://www.cheapshark.com/redirect?dealID=#{game.cheapestDealID}"),
       class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded") %>
   </div>

@@ -8,6 +8,7 @@
 </.header>
 
 <.table id="favorites" rows={@favorites} row_click={&JS.navigate(~p"/favorites/#{&1}")}>
+  <:col :let={favorite} label="User"><%= favorite.user_id %></:col>
   <:col :let={favorite} label="Title"><%= favorite.title %></:col>
   <:col :let={favorite} label="Metacriticlink"><%= favorite.metacriticLink %></:col>
   <:col :let={favorite} label="Dealid"><%= favorite.dealID %></:col>
@@ -15,6 +16,7 @@
   <:col :let={favorite} label="Gameid"><%= favorite.gameID %></:col>
   <:col :let={favorite} label="Steamappid"><%= favorite.steamAppID %></:col>
   <:col :let={favorite} label="Currprice"><%= favorite.currPrice %></:col>
+  <:col :let={favorite} label="Retailprice"><%= favorite.retailPrice %></:col>
   <:col :let={favorite} label="Onsale"><%= favorite.onSale %></:col>
   <:col :let={favorite} label="Thumb"><%= favorite.thumb %></:col>
   <:action :let={favorite}>

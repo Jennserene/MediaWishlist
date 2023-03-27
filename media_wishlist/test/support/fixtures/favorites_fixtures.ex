@@ -11,7 +11,8 @@ defmodule MediaWishlist.FavoritesFixtures do
     {:ok, favorite} =
       attrs
       |> Enum.into(%{
-        currPrice: 42,
+        currPrice: "42.99",
+        retailPrice: "24.99",
         dealID: "some dealID",
         gameID: "some gameID",
         metacriticLink: "some metacriticLink",
