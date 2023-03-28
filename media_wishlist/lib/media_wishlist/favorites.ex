@@ -35,6 +35,13 @@ defmodule MediaWishlist.Favorites do
       ** (Ecto.NoResultsError)
 
   """
+
+  def list_user_favorites(user_id) do
+    query = from f in Favorite,
+      where: f.user_id == ^user_id
+    Repo.all(query)
+  end
+
   def get_favorite!(id), do: Repo.get!(Favorite, id)
 
   @doc """

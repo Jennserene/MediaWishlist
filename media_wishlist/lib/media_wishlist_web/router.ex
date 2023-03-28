@@ -93,6 +93,7 @@ defmodule MediaWishlistWeb.Router do
     pipe_through [:browser, :require_authenticated_user]
 
     post "/new", WishlistController, :new
+    delete "/:id", WishlistController, :delete
     get "/", WishlistController, :view
   end
 

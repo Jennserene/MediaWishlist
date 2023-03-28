@@ -1,1 +1,17 @@
-<h1>View your wishlist here</h1>
+<h1><%= @current_user.email %>'s Wishlist</h1>
+
+<.table id="favorites" rows={@favorites}>
+  <:col :let={favorite}><img src={favorite.thumb}></:col>
+  <:col :let={favorite} label="Title"><%= favorite.title %></:col>
+  <:col :let={favorite} label="Sale Price"><%= favorite.currPrice %></:col>
+  <:col :let={favorite} label="Retail Price"><%= favorite.retailPrice %></:col>
+  <:action :let={favorite}><%= link("This Deal",
+    to: URI.parse("https://www.cheapshark.com/redirect?dealID=#{favorite.dealID}"),
+    class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded") %></:action>
+  <:action :let={favorite}><%= link("Reviews",
+    to: URI.parse("https://www.metacritic.com#{favorite.metacriticLink}"),
+    class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded") %></:action>
+  <:action :let={favorite}>
+    <.link href={~p"/wishlist/#{favorite}"} method="delete" data-confirm="Are you sure?">Delete</.link>
+  </:action>
+</.table>
