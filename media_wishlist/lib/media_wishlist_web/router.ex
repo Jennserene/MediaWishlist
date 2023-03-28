@@ -94,6 +94,7 @@ defmodule MediaWishlistWeb.Router do
 
     post "/new", WishlistController, :new
     delete "/:id", WishlistController, :delete
+    get "/:id", WishlistController, :game
     get "/", WishlistController, :view
   end
 

@@ -39,3 +39,33 @@ defmodule SingleDeal do
     gameInfo: %GameInfo{}
   ]
 end
+
+defmodule SingleGameDeal do
+  @derive [Poison.Encoder]
+  defstruct [
+    :storeID,
+    :dealID,
+    :price,
+    :retailPrice,
+    :savings
+  ]
+end
+
+defmodule SingleGameDeals do
+  @derive [Poison.Encoder]
+  defstruct [
+    :info,
+    :cheapestPriceEver,
+    deals: [%SingleGameDeal{}]
+  ]
+end
+
+defmodule Store do
+  @derive [Poison.Encoder]
+  defstruct [
+    :storeID,
+    :storeName,
+    :isActive,
+    :images
+  ]
+end

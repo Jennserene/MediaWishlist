@@ -1,0 +1,34 @@
+<div class="flex flex-row mb-10">
+  <div>
+    <img src={@favorite.thumb}>
+  </div>
+  <div class="ml-4">
+    <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight md:text-5xl lg:text-6xl">
+      <%= @favorite.title %>
+    </h1>
+    <%= if @favorite.onSale do %>
+      <p class="mb-2 text-2xl font-semibold">This game is on sale!</p>
+      <%= link("Get the latest deal for #{@favorite.currPrice}",
+        to: URI.parse("https://www.cheapshark.com/redirect?dealID=#{@favorite.dealID}"),
+        class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded") %>
+      <p class="mt-2">Available at <%= @favorite.storeID %></p>
+      <p>Normal retail price: <%= @favorite.retailPrice %></p>
+    <% else %>
+      <p class="mb-2 text-2xl font-semibold">This game is not on sale.</p>
+      <%= link("Get it for it's retail price of #{@favorite.retailPrice}",
+        to: URI.parse("https://www.cheapshark.com/redirect?dealID=#{@favorite.dealID}"),
+        class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded") %>
+      <p class="mt-2">Available at <%= @favorite.storeID %></p>
+    <% end %>
+  </div>
+</div>
+
+<p>Don't want to buy from <%= @favorite.storeID %>? Here are other options:</p>
+
+<.table id="rest" rows={@rest}>
+  <:col :let={deal} label="Store"><%= deal.storeID %></:col>
+  <:col :let={deal} label="Price"><%= deal.price %></:col>
+  <:action :let={deal}><%= link("This Deal",
+    to: URI.parse("https://www.cheapshark.com/redirect?dealID=#{deal.dealID}"),
+    class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded") %></:action>
+</.table>

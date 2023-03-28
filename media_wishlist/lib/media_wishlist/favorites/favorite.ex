@@ -14,7 +14,7 @@ defmodule MediaWishlist.Favorites.Favorite do
     field :storeID, :string
     field :thumb, :string
     field :title, :string
-    # field :user_id, :id
+
     belongs_to :user, User
 
     timestamps()

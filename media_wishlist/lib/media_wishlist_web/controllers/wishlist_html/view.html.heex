@@ -1,6 +1,6 @@
 <h1><%= @current_user.email %>'s Wishlist</h1>
 
-<.table id="favorites" rows={@favorites}>
+<.table id="favorites" rows={@favorites} row_click={&JS.navigate(~p"/wishlist/#{&1}")}>
   <:col :let={favorite}><img src={favorite.thumb}></:col>
   <:col :let={favorite} label="Title"><%= favorite.title %></:col>
   <:col :let={favorite} label="Sale Price"><%= favorite.currPrice %></:col>
