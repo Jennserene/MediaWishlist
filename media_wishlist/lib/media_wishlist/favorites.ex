@@ -4,6 +4,8 @@ defmodule MediaWishlist.Favorites do
   """
 
   import Ecto.Query, warn: false
+  require Logger
+  
   alias MediaWishlist.Repo
 
   alias MediaWishlist.Favorites.Favorite
@@ -37,8 +39,11 @@ defmodule MediaWishlist.Favorites do
   """
 
   def list_user_favorites(user_id) do
-    query = from f in Favorite,
-      where: f.user_id == ^user_id
+    query =
+      from(f in Favorite,
+        where: f.user_id == ^user_id
+      )
+
     Repo.all(query)
   end
 
@@ -107,5 +112,44 @@ defmodule MediaWishlist.Favorites do
   """
   def change_favorite(%Favorite{} = favorite, attrs \\ %{}) do
     Favorite.changeset(favorite, attrs)
+  end
+
+  def update_local_favorite(favorite, best) when favorite.dealID != best.dealID do
+    new_favorite =
+      favorite
+      |> Map.put(:storeID, best.storeID)
+      |> Map.put(:dealID, best.dealID)
+      |> Map.put(:currPrice, best.price)
+      |> Map.put(:retailPrice, best.retailPrice)
+      |> Map.put(:onSale, Float.parse(best.price) < Float.parse(best.retailPrice))
+
+    {:changed, new_favorite}
+  end
+
+  def update_local_favorite(favorite, best) when favorite.dealID == best.dealID do
+    {:same, favorite}
+  end
+
+  def update_favorite_wrapper(email, orig_fav, new_fav) do
+    case update_favorite(orig_fav, new_fav) do
+      {:ok, favorite} ->
+        Logger.info("Updated #{favorite.title} in #{email} with latest deal Successfully.")
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        Logger.error("Something went wrong updating a favorite with a new deal!")
+        Logger.error(IO.inspect(changeset))
+    end
+  end
+
+  def update_local_favorite_wrapper(email, orig_favorite, best) do
+    case update_local_favorite(orig_favorite, best) do
+      {:changed, new_favorite} ->
+        update_favorite_wrapper(email, orig_favorite, new_favorite)
+        new_favorite
+
+      {:same, same_favorite} ->
+        Logger.debug("#{same_favorite.title} is already up to date")
+        same_favorite
+    end
   end
 end

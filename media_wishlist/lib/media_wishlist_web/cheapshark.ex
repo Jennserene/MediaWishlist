@@ -1,10 +1,15 @@
 defmodule CheapSharkApi do
   require Logger
+  alias MediaWishlist.Favorites
 
   @list_of_deals [%Deal{}]
+  @list_of_stores [%Store{}]
+  @list_of_games [%SingleGameDeals{}]
 
   def search_deals(search_term) do
-    "https://www.cheapshark.com/api/1.0/games?title=#{search_term}"
+    fixed_search_term = String.replace(search_term, " ", "%20")
+
+    "https://www.cheapshark.com/api/1.0/games?title=#{fixed_search_term}"
     |> fetch_data()
     |> Poison.decode!(%{as: @list_of_deals})
   end
@@ -40,8 +45,6 @@ defmodule CheapSharkApi do
     store.storeName
   end
 
-  @list_of_stores [%Store{}]
-
   def retrieve_store(storeID) do
     File.read!(Path.join(:code.priv_dir(:media_wishlist), "data/stores.json"))
     |> Poison.decode!(%{as: @list_of_stores})
@@ -63,8 +66,10 @@ defmodule CheapSharkApi do
   end
 
   def convert_to_include_store_names(game) do
-    deals_with_store_names = game.deals
-    |> Enum.map(fn deal -> Map.put(deal, :storeID, retrieve_store_wrapper(deal.storeID)) end)
+    deals_with_store_names =
+      game.deals
+      |> Enum.map(fn deal -> Map.put(deal, :storeID, retrieve_store_wrapper(deal.storeID)) end)
+
     Map.put(game, :deals, deals_with_store_names)
   end
 
@@ -84,5 +89,25 @@ defmodule CheapSharkApi do
       thumb: deal.gameInfo.thumb,
       title: deal.gameInfo.name
     }
+  end
+
+  def merge_into_favorite(game, new_deals, email) do
+    deal = new_deals[game.gameID]
+    [best | rest] = deal["deals"]
+    fixed_best = for {key, val} <- best, into: %{}, do: {String.to_atom(key), val}
+    fixed_best = Map.put(fixed_best, :storeID, retrieve_store_wrapper(fixed_best.storeID))
+    Favorites.update_local_favorite_wrapper(email, game, fixed_best)
+  end
+
+  def fetch_users_latest_prices(favs, email) do
+    favs
+    |> Enum.map(fn fav -> fav.gameID end)
+    |> Enum.join(",")
+    |> (&"https://www.cheapshark.com/api/1.0/games?ids=#{&1}").()
+    |> fetch_data()
+    |> Poison.decode!()
+    |> (fn new_deals ->
+          Enum.map(favs, fn fav -> merge_into_favorite(fav, new_deals, email) end)
+        end).()
   end
 end

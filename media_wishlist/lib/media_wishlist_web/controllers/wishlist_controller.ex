@@ -5,6 +5,7 @@ defmodule MediaWishlistWeb.WishlistController do
   alias MediaWishlist.Favorites
 
   def new(conn, %{"game" => %{"dealID" => dealID}}) do
+    # TODO: prevent duplicates
     result = CheapSharkApi.deal_lookup(dealID)
     result = Map.put(result, :user_id, conn.assigns.current_user.id)
 
@@ -44,48 +45,41 @@ defmodule MediaWishlistWeb.WishlistController do
     |> redirect(to: ~p"/wishlist")
   end
 
-  def update_local_favorite(favorite, best) when favorite.dealID != best.dealID do
-    new_favorite = favorite
-    |> Map.put(:storeID, best.storeID)
-    |> Map.put(:dealID, best.dealID)
-    |> Map.put(:currPrice, best.price)
-    |> Map.put(:retailPrice, best.retailPrice)
-    |> Map.put(:onSale, Float.parse(best.price) < Float.parse(best.retailPrice))
-    {:changed, new_favorite}
-  end
+  def game(conn, %{"id" => id}) do
+    orig_favorite = Favorites.get_favorite!(id)
 
-  def update_local_favorite(favorite, best) when favorite.dealID == best.dealID do
-    {:same, favorite}
-  end
+    if orig_favorite.user_id == conn.assigns.current_user.id do
+      result = CheapSharkApi.game_deals_lookup(orig_favorite.gameID)
+      [best | rest] = result.deals
 
-  def update_db_wrapper(conn, orig_fav, new_fav) do
-    case Favorites.update_favorite(orig_fav, new_fav) do
-      {:ok, favorite} ->
-        Logger.info(
-          "Updated #{favorite.title} in #{conn.assigns.current_user.email} with latest deal Successfully."
+      favorite =
+        Favorites.update_local_favorite_wrapper(
+          conn.assigns.current_user.email,
+          orig_favorite,
+          best
         )
 
-      {:error, %Ecto.Changeset{} = changeset} ->
-        Logger.error("Something went wrong updating a favorite with a new deal!")
-        Logger.error(IO.inspect(changeset))
+      render(conn, :game, favorite: favorite, rest: rest)
+    else
+      conn
+      |> put_flash(:error, "That is not a valid ID")
+      |> redirect(to: ~p"/wishlist")
     end
   end
 
-  def game(conn, %{"id" => id}) do
-    orig_favorite = Favorites.get_favorite!(id)
-    result = CheapSharkApi.game_deals_lookup(orig_favorite.gameID)
-    [best | rest] = result.deals
+  def fetch(conn, _params) do
+    log_string = "Fetching latest prices for #{conn.assigns.current_user.email}'s wishlist"
+    Logger.info(log_string)
 
-    favorite =
-      case update_local_favorite(orig_favorite, best) do
-        {:changed, new_favorite} ->
-          update_db_wrapper(conn, orig_favorite, new_favorite)
-          new_favorite
+    chunked_favs =
+      Favorites.list_user_favorites(conn.assigns.current_user.id)
+      |> Enum.chunk_every(25)
 
-        {:same, same_favorite} ->
-          same_favorite
-      end
+    for chunk <- chunked_favs,
+        do: CheapSharkApi.fetch_users_latest_prices(chunk, conn.assigns.current_user.email)
 
-    render(conn, :game, favorite: favorite, rest: rest)
+    conn
+    |> put_flash(:info, log_string)
+    |> redirect(to: ~p"/wishlist")
   end
 end
