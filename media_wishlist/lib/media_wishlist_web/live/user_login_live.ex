@@ -5,7 +5,15 @@ defmodule MediaWishlistWeb.UserLoginLive do
     ~H"""
     <div class="mx-auto max-w-sm">
       <.header class="text-center">
-        Sign in to account
+        Welcome to
+      </.header>
+      <div class="text-center">
+        <p class="inline-block rounded-full text-center bg-green-500 text-white px-4 text-[2.6rem] font-bold leading-20 font-serif">
+          Media Wishlist
+        </p>
+      </div>
+      <.header class="text-center mt-10">
+        Sign in to your account
         <:subtitle>
           Don't have an account?
           <.link navigate={~p"/users/register"} class="font-semibold text-brand hover:underline">

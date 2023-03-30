@@ -5,7 +5,7 @@ defmodule MediaWishlist.Favorites do
 
   import Ecto.Query, warn: false
   require Logger
-  
+
   alias MediaWishlist.Repo
 
   alias MediaWishlist.Favorites.Favorite
@@ -115,13 +115,19 @@ defmodule MediaWishlist.Favorites do
   end
 
   def update_local_favorite(favorite, best) when favorite.dealID != best.dealID do
-    new_favorite =
-      favorite
-      |> Map.put(:storeID, best.storeID)
-      |> Map.put(:dealID, best.dealID)
-      |> Map.put(:currPrice, best.price)
-      |> Map.put(:retailPrice, best.retailPrice)
-      |> Map.put(:onSale, Float.parse(best.price) < Float.parse(best.retailPrice))
+    new_favorite = %{
+      storeID: best.storeID,
+      dealID: best.dealID,
+      currPrice: best.price,
+      retailPrice: best.retailPrice,
+      onSale: Float.parse(best.price) < Float.parse(best.retailPrice),
+      gameID: favorite.gameID,
+      metacriticLink: favorite.metacriticLink,
+      steamAppID: favorite.steamAppID,
+      thumb: favorite.thumb,
+      title: favorite.title,
+      user_id: favorite.user_id
+    }
 
     {:changed, new_favorite}
   end

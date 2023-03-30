@@ -1,19 +1,24 @@
-<h1>Search for the lowest prices on games</h1>
-<%= form_for @conn.params["search"] || %{}, ~p"/search", [as: :search], fn f -> %>
-  <%= text_input f, :search_term %>
-  <%= submit "Search", class: "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" %>
+<h1>Search Results:</h1>
+
+<%= if length(@search_results) > 0 do %>
+  <.max_height_table id="search_results" rows={@search_results}>
+    <:col :let={game}>
+      <%= form_for @conn.params["game"] || %{}, ~p"/wishlist/new", [as: :game], fn f -> %>
+        <%= hidden_input f, :dealID, value: game.cheapestDealID %>
+        <%= submit "Add" %>
+      <% end %></:col>
+    <:col :let={game} label="Thumbnail"><img src={game.thumb}></:col>
+    <:col :let={game} label="Title"><%= game.external %></:col>
+    <:col :let={game} label="Cheapest Price"><%= game.cheapest %></:col>
+    <:action :let={game}>
+      <%= link("Buy",
+        to: URI.parse("https://www.cheapshark.com/redirect?dealID=#{game.cheapestDealID}"),
+        target: "_blank",
+        rel: "noopener noreferrer",
+        class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded") %></:action>
+  </.max_height_table>
 <% end %>
 
-<%= for game <- @search_results do %>
-  <div class="flex flex-row m-2 space-x-2 items-center">
-    <%= form_for @conn.params["game"] || %{}, ~p"/wishlist/new", [as: :game], fn f -> %>
-      <%= hidden_input f, :dealID, value: game.cheapestDealID %>
-      <%= submit "Add" %>
-    <% end %>
-    <div class="border-black border-l-2 p-1">Title: <%= game.external %></div>
-    <div>Price: <%= game.cheapest %></div>
-    <%= link("This Deal",
-      to: URI.parse("https://www.cheapshark.com/redirect?dealID=#{game.cheapestDealID}"),
-      class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded") %>
-  </div>
+<%= if length(@search_results) == 0 do %>
+  <p>Sorry, your search yielded no results.</p>
 <% end %>

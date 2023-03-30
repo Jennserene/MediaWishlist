@@ -7,9 +7,9 @@ defmodule CheapSharkApi do
   @list_of_games [%SingleGameDeals{}]
 
   def search_deals(search_term) do
-    fixed_search_term = String.replace(search_term, " ", "%20")
-
-    "https://www.cheapshark.com/api/1.0/games?title=#{fixed_search_term}"
+    search_term
+    |> URI.encode()
+    |> (&"https://www.cheapshark.com/api/1.0/games?title=#{&1}").()
     |> fetch_data()
     |> Poison.decode!(%{as: @list_of_deals})
   end

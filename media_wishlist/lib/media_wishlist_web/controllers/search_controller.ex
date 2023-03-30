@@ -2,7 +2,7 @@ defmodule MediaWishlistWeb.SearchController do
   use MediaWishlistWeb, :controller
 
   def start(conn, _params) do
-    render(conn, :start)
+    redirect(conn, to: ~p"/wishlist")
   end
 
   def results(conn, %{"search" => %{"search_term" => search_term}}) do
