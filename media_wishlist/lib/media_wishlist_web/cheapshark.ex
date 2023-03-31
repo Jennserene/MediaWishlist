@@ -111,7 +111,9 @@ defmodule CheapSharkApi do
         end).()
   end
 
-  def fetch_all_for_user(id, email) do
+  def fetch_all_for_user(id, email, wait \\ false) do
+    if wait, do: :timer.sleep(60 * 1000)
+
     Favorites.list_user_chunked_favorites(id)
     |> Enum.each(fn chunk -> fetch_users_latest_prices(chunk, email) end)
   end

@@ -18,8 +18,8 @@ defmodule MediaWishlist.FetchDaily do
   end
 
   def handle_info(:work, state) do
-    fetch_for_subscribed_users()
     schedule_work()
+    fetch_for_subscribed_users()
     {:noreply, state}
   end
 
@@ -31,7 +31,7 @@ defmodule MediaWishlist.FetchDaily do
     Logger.info("Fetching pricing data for #{Accounts.num_subscribers()} subscribers.")
 
     Accounts.list_subscribed_users()
-    |> Enum.each(fn user -> CheapSharkApi.fetch_all_for_user(user.id, user.email) end)
+    |> Enum.each(fn user -> CheapSharkApi.fetch_all_for_user(user.id, user.email, true) end)
 
     Logger.info("Fetching completed. Next fetch for subscribers in 24 hours.")
   end
