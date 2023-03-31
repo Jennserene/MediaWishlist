@@ -114,6 +114,11 @@ defmodule MediaWishlist.Favorites do
     Favorite.changeset(favorite, attrs)
   end
 
+  def list_user_chunked_favorites(id) do
+    list_user_favorites(id)
+    |> Enum.chunk_every(25)
+  end
+
   def update_local_favorite(favorite, best) when favorite.dealID != best.dealID do
     new_favorite = %{
       storeID: best.storeID,

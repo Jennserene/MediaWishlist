@@ -350,4 +350,28 @@ defmodule MediaWishlist.Accounts do
       {:error, :user, changeset, _} -> {:error, changeset}
     end
   end
+
+  def change_user_fetch_daily(user, attrs \\ %{}) do
+    User.fetch_daily_changeset(user, attrs)
+  end
+
+  def apply_user_fetch_daily(user, attrs) do
+    user
+    |> User.fetch_daily_changeset(attrs)
+    |> Repo.update()
+  end
+
+  def list_subscribed_users() do
+    from(u in User,
+      where: u.fetch_daily == true
+    )
+    |> Repo.all()
+  end
+
+  def num_subscribers() do
+    from(u in User,
+      where: u.fetch_daily == true
+    )
+    |> Repo.aggregate(:count)
+  end
 end

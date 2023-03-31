@@ -71,12 +71,7 @@ defmodule MediaWishlistWeb.WishlistController do
     log_string = "Fetching latest prices for #{conn.assigns.current_user.email}'s wishlist"
     Logger.info(log_string)
 
-    chunked_favs =
-      Favorites.list_user_favorites(conn.assigns.current_user.id)
-      |> Enum.chunk_every(25)
-
-    for chunk <- chunked_favs,
-        do: CheapSharkApi.fetch_users_latest_prices(chunk, conn.assigns.current_user.email)
+    CheapSharkApi.fetch_all_for_user(conn.assigns.current_user.id, conn.assigns.current_user.email)
 
     conn
     |> put_flash(:info, log_string)

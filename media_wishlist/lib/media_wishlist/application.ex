@@ -17,9 +17,10 @@ defmodule MediaWishlist.Application do
       # Start Finch
       {Finch, name: MediaWishlist.Finch},
       # Start the Endpoint (http/https)
-      MediaWishlistWeb.Endpoint
+      MediaWishlistWeb.Endpoint,
       # Start a worker by calling: MediaWishlist.Worker.start_link(arg)
       # {MediaWishlist.Worker, arg}
+      MediaWishlist.FetchDaily
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

@@ -13,7 +13,14 @@
         target: "_blank",
         rel: "noopener noreferrer",
         class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded") %>
-      <p class="mt-2">Available at <%= @favorite.storeID %></p>
+      <p class="mt-2">
+        <%= if length(@rest) == 0 do %>
+          Only available
+        <% else %>
+          Available
+        <% end %>
+        at <%= @favorite.storeID %>
+      </p>
       <p>Normal retail price: <%= @favorite.retailPrice %></p>
     <% else %>
       <p class="mb-2 text-2xl font-semibold">This game is not on sale.</p>
@@ -22,19 +29,28 @@
         target: "_blank",
         rel: "noopener noreferrer",
         class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded") %>
-      <p class="mt-2">Available at <%= @favorite.storeID %></p>
+      <p class="mt-2">
+        <%= if length(@rest) == 0 do %>
+          Only available
+        <% else %>
+          Available
+        <% end %>
+        at <%= @favorite.storeID %>
+      </p>
     <% end %>
   </div>
 </div>
 
-<p>Don't want to buy from <%= @favorite.storeID %>? Here are other options:</p>
+<%= if length(@rest) > 0 do %>
+  <p>Don't want to buy from <%= @favorite.storeID %>? Here are other options:</p>
 
-<.table id="rest" rows={@rest}>
-  <:col :let={deal} label="Store"><%= deal.storeID %></:col>
-  <:col :let={deal} label="Price"><%= deal.price %></:col>
-  <:action :let={deal}><%= link("Buy",
-    to: URI.parse("https://www.cheapshark.com/redirect?dealID=#{deal.dealID}"),
-    target: "_blank",
-    rel: "noopener noreferrer",
-    class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded") %></:action>
-</.table>
+  <.table id="rest" rows={@rest}>
+    <:col :let={deal} label="Store"><%= deal.storeID %></:col>
+    <:col :let={deal} label="Price"><%= deal.price %></:col>
+    <:action :let={deal}><%= link("Buy",
+      to: URI.parse("https://www.cheapshark.com/redirect?dealID=#{deal.dealID}"),
+      target: "_blank",
+      rel: "noopener noreferrer",
+      class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded") %></:action>
+  </.table>
+<% end %>

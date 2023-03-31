@@ -110,4 +110,9 @@ defmodule CheapSharkApi do
           Enum.map(favs, fn fav -> merge_into_favorite(fav, new_deals, email) end)
         end).()
   end
+
+  def fetch_all_for_user(id, email) do
+    Favorites.list_user_chunked_favorites(id)
+    |> Enum.each(fn chunk -> fetch_users_latest_prices(chunk, email) end)
+  end
 end

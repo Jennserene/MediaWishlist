@@ -5,7 +5,17 @@ defmodule MediaWishlistWeb.UserSettingsLive do
 
   def render(assigns) do
     ~H"""
-    <.header>Change Email</.header>
+    <.header>Fetch New Prices in Wishlist Daily</.header>
+
+    <.small_simple_form
+      for={@fetch_daily_form}
+      id="fetch_daily_form"
+      phx-change="update_fetch_daily"
+    >
+      <.input field={@fetch_daily_form[:fetch_daily]} type="checkbox" label="Fetch Daily" />
+    </.small_simple_form>
+
+    <.header class="mt-10">Change Email</.header>
 
     <.simple_form
       for={@email_form}
@@ -28,7 +38,7 @@ defmodule MediaWishlistWeb.UserSettingsLive do
       </:actions>
     </.simple_form>
 
-    <.header>Change Password</.header>
+    <.header class="mt-10">Change Password</.header>
 
     <.simple_form
       for={@password_form}
@@ -79,14 +89,17 @@ defmodule MediaWishlistWeb.UserSettingsLive do
     user = socket.assigns.current_user
     email_changeset = Accounts.change_user_email(user)
     password_changeset = Accounts.change_user_password(user)
+    fetch_daily_changeset = Accounts.change_user_fetch_daily(user)
 
     socket =
       socket
       |> assign(:current_password, nil)
       |> assign(:email_form_current_password, nil)
+      |> assign(:current_fetch_daily, user.fetch_daily)
       |> assign(:current_email, user.email)
       |> assign(:email_form, to_form(email_changeset))
       |> assign(:password_form, to_form(password_changeset))
+      |> assign(:fetch_daily_form, to_form(fetch_daily_changeset))
       |> assign(:trigger_submit, false)
 
     {:ok, socket}
@@ -151,6 +164,26 @@ defmodule MediaWishlistWeb.UserSettingsLive do
 
       {:error, changeset} ->
         {:noreply, assign(socket, password_form: to_form(changeset))}
+    end
+  end
+
+  def handle_event("update_fetch_daily", params, socket) do
+    %{"user" => user_params} = params
+    user = socket.assigns.current_user
+
+    case Accounts.apply_user_fetch_daily(user, user_params) do
+      {:ok, user} ->
+        info =
+          case user.fetch_daily do
+            true -> "Your wishlist has been subscribed for daily price updates."
+            false -> "Your wishlist has been unsubscribed from daily price updates."
+          end
+
+        {:noreply,
+         socket |> put_flash(:info, info) |> assign(current_fetch_daily: user.fetch_daily)}
+
+      {:error, changeset} ->
+        {:noreply, assign(socket, :email_form, to_form(Map.put(changeset, :action, :insert)))}
     end
   end
 end
