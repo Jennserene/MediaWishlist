@@ -1,13 +1,11 @@
-<h1>Search Results:</h1>
-
 <%= if length(@search_results) > 0 do %>
   <.max_height_table id="search_results" rows={@search_results}>
     <:col :let={game}>
       <%= form_for @conn.params["game"] || %{}, ~p"/wishlist/new", [as: :game], fn f -> %>
         <%= hidden_input f, :dealID, value: game.cheapestDealID %>
-        <%= submit "Add" %>
+        <%= submit "Add", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-0.5 px-2 rounded" %>
       <% end %></:col>
-    <:col :let={game} label="Thumbnail"><img src={game.thumb}></:col>
+    <:col :let={game}><img src={game.thumb}></:col>
     <:col :let={game} label="Title"><%= game.external %></:col>
     <:col :let={game} label="Cheapest Price"><%= game.cheapest %></:col>
     <:action :let={game}>

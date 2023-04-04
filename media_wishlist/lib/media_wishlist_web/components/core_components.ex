@@ -149,7 +149,7 @@ defmodule MediaWishlistWeb.CoreComponents do
       phx-click={JS.push("lv:clear-flash", value: %{key: @kind}) |> hide("##{@id}")}
       role="alert"
       class={[
-        "fixed hidden bottom-2 right-4 w-80 sm:w-96 z-50 rounded-lg p-3 shadow-md shadow-zinc-900/5 ring-1",
+        "fixed hidden top-21 left-4 w-80 sm:w-96 z-50 rounded-lg p-3 shadow-md shadow-zinc-900/5 ring-1",
         @kind == :info && "bg-emerald-50 text-emerald-800 ring-emerald-500 fill-cyan-900",
         @kind == :error && "bg-rose-50 p-3 text-rose-900 shadow-md ring-rose-500 fill-rose-900"
       ]}
@@ -718,7 +718,7 @@ defmodule MediaWishlistWeb.CoreComponents do
 
     ~H"""
     <div class="px-4 sm:overflow-visible sm:px-0">
-      <table class="mt-11 w-[45rem]">
+      <table class="mt-11 sm:w-[30rem] lg:w-[45rem]">
         <thead class="text-left text-[0.8125rem] leading-6 text-zinc-500">
           <tr>
             <th :for={col <- @col} class="p-0 pb-4 pr-6 font-strong"><%= col[:label] %></th>

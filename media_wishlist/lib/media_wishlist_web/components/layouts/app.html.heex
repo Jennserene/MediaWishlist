@@ -2,20 +2,20 @@
   <div class="flex items-center justify-between border-b border-zinc-100 py-3">
     <div class="flex items-center gap-4">
       <a href="/">
-        <p class="rounded-full bg-green-500 text-white px-2 text-[1.3rem] font-bold leading-10 font-serif">
+        <p class="rounded-full bg-green-500 text-white px-2 lg:text-[1.3rem] md:text-[1rem] sm:text-[.8rem] font-bold leading-10 mr-4 font-serif whitespace-nowrap">
           Media Wishlist
         </p>
       </a>
     </div>
     <%= if @current_user do %>
       <%= if Map.has_key?(assigns, :conn) do %>
-        <div class="flex items-center gap-4">
-          <.link href={~p"/wishlist"} class="bg-green-500 hover:bg-green-700 text-white font-bold mx-10 py-2 px-3 rounded">
+        <div class="flex items-center gap-4 whitespace-nowrap">
+          <.link href={~p"/wishlist"} class="bg-green-500 sm:text-[.8rem] hover:bg-green-700 text-white font-bold lg:mx-10 py-2 px-3 rounded">
             Your Wishlist
           </.link>
           <%= form_for @conn.params["search"] || %{}, ~p"/search", [as: :search], fn f -> %>
-            <%= text_input f, :search_term %>
-            <%= submit "Search", class: "bg-green-500 hover:bg-green-700 text-white font-bold ml-2 py-2 px-4 rounded" %>
+            <%= text_input f, :search_term, class: "sm:w-30 md:w-45 lg:w-60" %>
+            <%= submit "Search", class: "bg-green-500 hover:bg-green-700 text-white font-bold sm:text-[.8rem] lg:ml-2 py-2 px-4 rounded" %>
           <% end %>
         </div>
       <% else %>
@@ -28,7 +28,7 @@
     <% end %>
   </div>
 </header>
-<main class="px-4 py-20 sm:px-6 lg:px-8">
+<main class="px-4 py-10 sm:px-6 lg:px-8">
   <div class="mx-auto max-w-2xl">
     <.flash_group flash={@flash} />
     <%= @inner_content %>
