@@ -18,14 +18,14 @@ defmodule CheapSharkApi do
     "https://www.cheapshark.com/api/1.0/deals?id=#{dealID}"
     |> fetch_data()
     |> Poison.decode!(as: %SingleDeal{})
-    |> convert_to_favorite(dealID)
+    |> __MODULE__.convert_to_favorite(dealID)
   end
 
   def game_deals_lookup(gameID) do
     "https://www.cheapshark.com/api/1.0/games?id=#{gameID}"
     |> fetch_data()
     |> Poison.decode!(as: %SingleGameDeals{})
-    |> convert_to_include_store_names()
+    |> __MODULE__.convert_to_include_store_names()
   end
 
   def fetch_data(url) do
@@ -52,13 +52,13 @@ defmodule CheapSharkApi do
   end
 
   def retrieve_store_wrapper(storeID) do
-    case retrieve_store(storeID) do
+    case __MODULE__.retrieve_store(storeID) do
       nil ->
         store_data = fetch_data("https://www.cheapshark.com/api/1.0/stores")
         File.write!(Path.join(:code.priv_dir(:media_wishlist), "data/stores.json"), store_data)
 
-        retrieve_store(storeID)
-        |> store_name()
+        __MODULE__.retrieve_store(storeID)
+        |> __MODULE__.store_name()
 
       store ->
         store_name(store)
@@ -107,7 +107,7 @@ defmodule CheapSharkApi do
     |> fetch_data()
     |> Poison.decode!()
     |> (fn new_deals ->
-          Enum.map(favs, fn fav -> merge_into_favorite(fav, new_deals, email) end)
+          Enum.map(favs, fn fav ->__MODULE__.merge_into_favorite(fav, new_deals, email) end)
         end).()
   end
 

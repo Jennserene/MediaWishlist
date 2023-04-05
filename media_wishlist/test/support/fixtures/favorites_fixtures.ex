@@ -26,4 +26,25 @@ defmodule MediaWishlist.FavoritesFixtures do
 
     favorite
   end
+
+  def favorite_fixture_user(attrs \\ %{}) do
+    {:ok, favorite} =
+      attrs
+      |> Enum.into(%{
+        user_id: 1,
+        currPrice: "42.99",
+        retailPrice: "24.99",
+        dealID: "some dealID",
+        gameID: "some gameID",
+        metacriticLink: "some metacriticLink",
+        onSale: true,
+        steamAppID: "some steamAppID",
+        storeID: "some storeID",
+        thumb: "some thumb",
+        title: "some title"
+      })
+      |> MediaWishlist.Favorites.create_favorite()
+
+    favorite
+  end
 end
