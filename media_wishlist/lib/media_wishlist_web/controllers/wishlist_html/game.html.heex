@@ -1,42 +1,46 @@
-<div class="flex flex-row mb-10">
+<div class="flex flex-row mb-3 sm:mb-10">
   <div>
     <img src={@favorite.thumb}>
   </div>
   <div class="ml-4">
-    <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight md:text-5xl lg:text-6xl">
+    <h1 class="mb-4 text-2xl font-extrabold leading-none tracking-tight sm:text-4xl md:text-5xl lg:text-6xl">
       <%= @favorite.title %>
     </h1>
     <%= if @favorite.onSale do %>
-      <p class="mb-2 text-2xl font-semibold">This game is on sale!</p>
+      <p class="mb-2 text-xl sm:text-2xl font-semibold">This game is on sale!</p>
       <%= link("Get the latest deal for #{@favorite.currPrice}",
         to: URI.parse("https://www.cheapshark.com/redirect?dealID=#{@favorite.dealID}"),
         target: "_blank",
         rel: "noopener noreferrer",
-        class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded") %>
-      <p class="mt-2">
-        <%= if length(@rest) == 0 do %>
-          Only available
-        <% else %>
-          Available
-        <% end %>
-        at <%= @favorite.storeID %>
-      </p>
-      <p>Normal retail price: <%= @favorite.retailPrice %></p>
+        class: "bg-blue-500 hover:bg-blue-700 text-sm sm:text-base text-white font-bold py-1 sm:py-2 px-2 sm:px-4 rounded whitespace-nowrap") %>
+      <div class="text-sm sm:text-base">
+        <p class="mt-2">
+          <%= if length(@rest) == 0 do %>
+            Only available
+          <% else %>
+            Available
+          <% end %>
+          at <%= @favorite.storeID %>
+        </p>
+        <p>Normal retail price: <%= @favorite.retailPrice %></p>
+      </div>
     <% else %>
       <p class="mb-2 text-2xl font-semibold">This game is not on sale.</p>
       <%= link("Get it for it's retail price of #{@favorite.retailPrice}",
         to: URI.parse("https://www.cheapshark.com/redirect?dealID=#{@favorite.dealID}"),
         target: "_blank",
         rel: "noopener noreferrer",
-        class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded") %>
-      <p class="mt-2">
-        <%= if length(@rest) == 0 do %>
-          Only available
-        <% else %>
-          Available
-        <% end %>
-        at <%= @favorite.storeID %>
-      </p>
+        class: "bg-blue-500 hover:bg-blue-700 text-sm sm:text-base text-white font-bold py-1 sm:py-2 px-2 sm:px-4 rounded whitespace-nowrap") %>
+      <div class="text-sm sm:text-base">
+        <p class="mt-2">
+          <%= if length(@rest) == 0 do %>
+            Only available
+          <% else %>
+            Available
+          <% end %>
+          at <%= @favorite.storeID %>
+        </p>
+      </div>
     <% end %>
   </div>
 </div>

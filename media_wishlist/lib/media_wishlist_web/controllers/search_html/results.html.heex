@@ -1,19 +1,21 @@
 <%= if length(@search_results) > 0 do %>
   <.max_height_table id="search_results" rows={@search_results}>
-    <:col :let={game}>
-      <%= form_for @conn.params["game"] || %{}, ~p"/wishlist/new", [as: :game], fn f -> %>
-        <%= hidden_input f, :dealID, value: game.cheapestDealID %>
-        <%= submit "Add", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-0.5 px-2 rounded" %>
-      <% end %></:col>
-    <:col :let={game}><img src={game.thumb}></:col>
+    <:thumb :let={game}><img src={game.thumb}></:thumb>
     <:col :let={game} label="Title"><%= game.external %></:col>
     <:col :let={game} label="Cheapest Price"><%= game.cheapest %></:col>
     <:action :let={game}>
-      <%= link("Buy",
-        to: URI.parse("https://www.cheapshark.com/redirect?dealID=#{game.cheapestDealID}"),
-        target: "_blank",
-        rel: "noopener noreferrer",
-        class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded") %></:action>
+      <div class="flex flex-col items-center">
+        <%= form_for @conn.params["game"] || %{}, ~p"/wishlist/new", [as: :game], fn f -> %>
+          <%= hidden_input f, :dealID, value: game.cheapestDealID %>
+          <%= submit "Add", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded" %>
+        <% end %>
+        <div class="my-1" />
+        <%= link("Buy",
+          to: URI.parse("https://www.cheapshark.com/redirect?dealID=#{game.cheapestDealID}"),
+          target: "_blank",
+          rel: "noopener noreferrer",
+          class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded") %>
+      </div></:action>
   </.max_height_table>
 <% end %>
 

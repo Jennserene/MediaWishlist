@@ -8,7 +8,7 @@
 
 
   <.max_height_table id="favorites" rows={@favorites} row_click={&JS.navigate(~p"/wishlist/#{&1}")}>
-    <:col :let={favorite}><img src={favorite.thumb}></:col>
+    <:thumb :let={favorite}><img src={favorite.thumb}></:thumb>
     <:col :let={favorite} label="Title"><%= favorite.title %></:col>
     <:col :let={favorite} label="Sale Price">
       <%= if favorite.onSale do %>
@@ -19,23 +19,23 @@
     </:col>
     <:col :let={favorite} label="Retail Price"><%= favorite.retailPrice %></:col>
     <:action :let={favorite}>
-      <%= link("Buy",
-        to: URI.parse("https://www.cheapshark.com/redirect?dealID=#{favorite.dealID}"),
-        target: "_blank",
-        rel: "noopener noreferrer",
-        class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded") %>
-      <%= link("Reviews",
-        to: URI.parse("https://www.metacritic.com#{favorite.metacriticLink}"),
-        target: "_blank",
-        rel: "noopener noreferrer",
-        class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded") %>
-    </:action>
-    <:action :let={favorite}>
-      <%= link("Delete",
-      to: ~p"/wishlist/#{favorite}",
-      method: :delete,
-      data: [confirm: "Are you sure?"],
-      class: "font-bold text-red-600") %>
+      <div class="flex flex-col items-center">
+        <%= link("Buy",
+          to: URI.parse("https://www.cheapshark.com/redirect?dealID=#{favorite.dealID}"),
+          target: "_blank",
+          rel: "noopener noreferrer",
+          class: "bg-blue-500 hover:bg-blue-700 text-white font-bold mb-1 py-1 px-2 rounded") %>
+        <%= link("Reviews",
+          to: URI.parse("https://www.metacritic.com#{favorite.metacriticLink}"),
+          target: "_blank",
+          rel: "noopener noreferrer",
+          class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded") %>
+        <%= link("Delete",
+          to: ~p"/wishlist/#{favorite}",
+          method: :delete,
+          data: [confirm: "Are you sure?"],
+          class: "font-bold text-red-600 py-1") %>
+      </div>
     </:action>
   </.max_height_table>
 <% end %>
