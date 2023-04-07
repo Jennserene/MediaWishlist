@@ -16,9 +16,9 @@
     </div>
     <%= if @current_user do %>
       <%= if Map.has_key?(assigns, :conn) do %>
-        <div class="whitespace-nowrap self-end justify-self-end mt-2 sm:mt-0">
+        <div class="whitespace-nowrap self-end justify-self-end mt-2 ml-2 sm:mt-0">
           <%= form_for @conn.params["search"] || %{}, ~p"/search", [as: :search], fn f -> %>
-            <%= text_input f, :search_term, class: "ml-2 w-30 md:w-45 lg:w-60" %>
+            <%= text_input f, :search_term, class: "w-48 sm:w-60" %>
             <%= submit "Search", class: "bg-green-500 hover:bg-green-700 text-white font-bold text-[.8rem] lg:ml-2 py-2 px-4 rounded" %>
           <% end %>
         </div>
