@@ -25,7 +25,7 @@
         <p>Normal retail price: <%= @favorite.retailPrice %></p>
       </div>
     <% else %>
-      <p class="mb-2 text-2xl font-semibold">This game is not on sale.</p>
+      <p class="mb-2 text-xl sm:text-2xl font-semibold">This game is not on sale.</p>
       <%= link("Get it for it's retail price of #{@favorite.retailPrice}",
         to: URI.parse("https://www.cheapshark.com/redirect?dealID=#{@favorite.dealID}"),
         target: "_blank",

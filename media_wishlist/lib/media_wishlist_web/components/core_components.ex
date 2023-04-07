@@ -734,14 +734,9 @@ defmodule MediaWishlistWeb.CoreComponents do
           class="relative divide-y divide-zinc-100 border-t border-zinc-200 text-sm leading-6 text-zinc-700"
         >
           <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="group hover:bg-zinc-50 sm:h-[15rem]">
-            <td :if={@thumb != []} class="relative p-0 w-1/4 sm:w-auto h-[9rem] sm:h-[15rem]">
-              <div class="flex flex-grow pr-2 h-full w-full items-center">
-                <span
-                  :for={thumb <- @thumb}
-                  class="relative font-semibold leading-6 w-full text-zinc-900 hover:text-zinc-700"
-                >
-                  <%= render_slot(thumb, @row_item.(row)) %>
-                </span>
+            <td :if={@thumb != []} class="relative p-0 w-1/4 sm:w-auto h-[9rem] sm:h-[15rem] group-hover:bg-zinc-50">
+              <div :for={thumb <- @thumb} class="flex flex-grow m-1 pr-2 sm:mx-4 sm:pr-4 h-5/6 w-full group-hover:bg-zinc-50 justify-center items-center">
+                <%= render_slot(thumb, @row_item.(row)) %>
               </div>
             </td>
             <td
@@ -749,8 +744,8 @@ defmodule MediaWishlistWeb.CoreComponents do
               phx-click={@row_click && @row_click.(row)}
               class={["relative p-0 sm:pl-1 sm:h-[15rem]", @row_click && "hover:cursor-pointer"]}
             >
-              <div class="block py-4">
-                <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
+              <div class="block py-2 mr-2">
+                <span class="absolute -inset-y-px right-0 group-hover:bg-zinc-50 sm:rounded-l-xl" />
                 <span class={["relative", i == 0 && "font-semibold text-zinc-900"]}>
                   <%= render_slot(col, @row_item.(row)) %>
                 </span>
