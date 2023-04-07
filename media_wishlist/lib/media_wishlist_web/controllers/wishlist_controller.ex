@@ -5,10 +5,26 @@ defmodule MediaWishlistWeb.WishlistController do
   alias MediaWishlist.Favorites
 
   def new(conn, %{"game" => %{"dealID" => dealID}}) do
-    # TODO: prevent duplicates
     result = CheapSharkApi.deal_lookup(dealID)
     result = Map.put(result, :user_id, conn.assigns.current_user.id)
 
+    case check_for_duplicate_favorite(conn, result) do
+      true ->
+        conn
+        |> put_flash(:error, "#{result.title} is already on your wishlist")
+        |> redirect(to: "/wishlist")
+
+      false ->
+        new_create(conn, result)
+    end
+  end
+
+  def check_for_duplicate_favorite(conn, result) do
+    Favorites.list_user_favorites(conn.assigns.current_user.id)
+    |> Enum.any?(fn fav -> fav.gameID == result.gameID end)
+  end
+
+  def new_create(conn, result) do
     case Favorites.create_favorite(result) do
       {:ok, favorite} ->
         log_string =
@@ -71,7 +87,10 @@ defmodule MediaWishlistWeb.WishlistController do
     log_string = "Fetching latest prices for #{conn.assigns.current_user.email}'s wishlist"
     Logger.info(log_string)
 
-    CheapSharkApi.fetch_all_for_user(conn.assigns.current_user.id, conn.assigns.current_user.email)
+    CheapSharkApi.fetch_all_for_user(
+      conn.assigns.current_user.id,
+      conn.assigns.current_user.email
+    )
 
     conn
     |> put_flash(:info, log_string)

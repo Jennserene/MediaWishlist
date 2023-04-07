@@ -18,7 +18,7 @@
       <%= if Map.has_key?(assigns, :conn) do %>
         <div class="whitespace-nowrap self-end justify-self-end mt-2 sm:mt-0">
           <%= form_for @conn.params["search"] || %{}, ~p"/search", [as: :search], fn f -> %>
-            <%= text_input f, :search_term, class: "w-30 md:w-45 lg:w-60" %>
+            <%= text_input f, :search_term, class: "ml-2 w-30 md:w-45 lg:w-60" %>
             <%= submit "Search", class: "bg-green-500 hover:bg-green-700 text-white font-bold text-[.8rem] lg:ml-2 py-2 px-4 rounded" %>
           <% end %>
         </div>
@@ -26,7 +26,7 @@
     <% end %>
   </div>
 </header>
-<main class="px-4 py-3 sm:py-10 sm:px-6 lg:px-8">
+<main class="px-1 sm:px-4 py-3 sm:py-10 sm:px-6 lg:px-8">
   <div class="mx-auto max-w-2xl">
     <.flash_group flash={@flash} />
     <%= @inner_content %>

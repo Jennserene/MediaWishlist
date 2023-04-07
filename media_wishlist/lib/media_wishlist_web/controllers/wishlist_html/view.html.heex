@@ -1,7 +1,7 @@
 <%= if length(@favorites) > 0 do %>
-  <div class="flex flex-row items-center">
+  <div class="flex flex-row flex-wrap items-center">
     <h1 class="mr-4"><%= @current_user.email %>'s Wishlist</h1>
-    <.link href={~p"/wishlist/fetch"} class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded">
+    <.link href={~p"/wishlist/fetch"} class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded whitespace-nowrap">
       Fetch latest prices
     </.link>
   </div>

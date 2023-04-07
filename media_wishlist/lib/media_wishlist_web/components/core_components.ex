@@ -723,7 +723,7 @@ defmodule MediaWishlistWeb.CoreComponents do
       <table class="mt-2 sm:mt-11 w-full sm:w-[30rem] lg:w-[45rem]">
         <thead class="text-left text-[0.8125rem] leading-6 text-zinc-500">
           <tr>
-            <th :if={@thumb != []} class="relative p-0 w-0 sm:w-auto collapse sm:visible"></th>
+            <th :if={@thumb != []} class="relative p-0 w-0 sm:w-auto"></th>
             <th :for={col <- @col} class="p-0 pb-4 sm:pl-1 font-strong"><%= col[:label] %></th>
             <th class="relative p-0 pb-4"><span class="sr-only"><%= gettext("Actions") %></span></th>
           </tr>
@@ -734,12 +734,11 @@ defmodule MediaWishlistWeb.CoreComponents do
           class="relative divide-y divide-zinc-100 border-t border-zinc-200 text-sm leading-6 text-zinc-700"
         >
           <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="group hover:bg-zinc-50 sm:h-[15rem]">
-            <td :if={@thumb != []} class="relative p-0 w-0 sm:w-auto sm:h-[15rem] collapse sm:visible">
-              <div class="block pb-2">
-                <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
+            <td :if={@thumb != []} class="relative p-0 w-1/4 sm:w-auto h-[9rem] sm:h-[15rem]">
+              <div class="flex flex-grow pr-2 h-full w-full items-center">
                 <span
                   :for={thumb <- @thumb}
-                  class="relative ml-4 font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
+                  class="relative font-semibold leading-6 w-full text-zinc-900 hover:text-zinc-700"
                 >
                   <%= render_slot(thumb, @row_item.(row)) %>
                 </span>
