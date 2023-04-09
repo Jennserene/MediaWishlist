@@ -1,8 +1,0 @@
-<.header>
-  Edit Favorite <%= @favorite.id %>
-  <:subtitle>Use this form to manage favorite records in your database.</:subtitle>
-</.header>
-
-<.favorite_form changeset={@changeset} action={~p"/favorites/#{@favorite}"} />
-
-<.back navigate={~p"/favorites"}>Back to favorites</.back>

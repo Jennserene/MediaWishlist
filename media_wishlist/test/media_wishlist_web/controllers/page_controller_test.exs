@@ -1,10 +1,17 @@
 defmodule MediaWishlistWeb.PageControllerTest do
   use MediaWishlistWeb.ConnCase
+  import MediaWishlist.AccountsFixtures
 
-  test "GET /", %{conn: conn} do
+  test "GET / logged out", %{conn: conn} do
     conn = get(conn, ~p"/")
 
-    assert html_response(conn, 302) =~
-             "<html><body>You are being <a href=\"/users/log_in\">redirected</a>.</body></html>"
+    assert redirected_to(conn) == ~p"/users/log_in"
+  end
+
+  test "GET / logged in", %{conn: conn} do
+    conn = sign_up(conn)
+    conn = get(conn, ~p"/")
+
+    assert redirected_to(conn) == ~p"/wishlist"
   end
 end
