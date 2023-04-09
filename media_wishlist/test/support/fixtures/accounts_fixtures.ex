@@ -3,6 +3,7 @@ defmodule MediaWishlist.AccountsFixtures do
   This module defines test helpers for creating
   entities via the `MediaWishlist.Accounts` context.
   """
+  use MediaWishlistWeb.ConnCase
 
   def unique_user_email, do: "user#{System.unique_integer()}@example.com"
   def valid_user_password, do: "hello world!"
@@ -27,5 +28,13 @@ defmodule MediaWishlist.AccountsFixtures do
     {:ok, captured_email} = fun.(&"[TOKEN]#{&1}[TOKEN]")
     [_, token | _] = String.split(captured_email.text_body, "[TOKEN]")
     token
+  end
+
+  def sign_up(conn) do
+    user = user_fixture()
+
+    post(conn, ~p"/users/log_in", %{
+      "user" => %{"email" => user.email, "password" => valid_user_password()}
+    })
   end
 end

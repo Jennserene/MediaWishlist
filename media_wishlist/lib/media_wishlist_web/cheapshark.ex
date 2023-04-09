@@ -4,7 +4,6 @@ defmodule CheapSharkApi do
 
   @list_of_deals [%Deal{}]
   @list_of_stores [%Store{}]
-  @list_of_games [%SingleGameDeals{}]
 
   def search_deals(search_term) do
     search_term
@@ -93,7 +92,7 @@ defmodule CheapSharkApi do
 
   def merge_into_favorite(game, new_deals, email) do
     deal = new_deals[game.gameID]
-    [best | rest] = deal["deals"]
+    [best | _rest] = deal["deals"]
     fixed_best = for {key, val} <- best, into: %{}, do: {String.to_atom(key), val}
     fixed_best = Map.put(fixed_best, :storeID, retrieve_store_wrapper(fixed_best.storeID))
     Favorites.update_local_favorite_wrapper(email, game, fixed_best)

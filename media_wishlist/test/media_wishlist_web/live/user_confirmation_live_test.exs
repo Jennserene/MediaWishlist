@@ -66,7 +66,7 @@ defmodule MediaWishlistWeb.UserConfirmationLiveTest do
         |> render_submit()
         |> follow_redirect(conn, "/")
 
-      assert {:ok, conn} = result
+      assert {:ok, _conn} = result
     end
 
     test "does not confirm email with invalid token", %{conn: conn, user: user} do

@@ -19,12 +19,12 @@ defmodule MediaWishlistWeb.WishlistController do
     end
   end
 
-  def check_for_duplicate_favorite(conn, result) do
+  defp check_for_duplicate_favorite(conn, result) do
     Favorites.list_user_favorites(conn.assigns.current_user.id)
     |> Enum.any?(fn fav -> fav.gameID == result.gameID end)
   end
 
-  def new_create(conn, result) do
+  defp new_create(conn, result) do
     case Favorites.create_favorite(result) do
       {:ok, favorite} ->
         log_string =
@@ -62,24 +62,31 @@ defmodule MediaWishlistWeb.WishlistController do
   end
 
   def game(conn, %{"id" => id}) do
-    orig_favorite = Favorites.get_favorite!(id)
+    try do
+      orig_favorite = Favorites.get_favorite!(id)
 
-    if orig_favorite.user_id == conn.assigns.current_user.id do
-      result = CheapSharkApi.game_deals_lookup(orig_favorite.gameID)
-      [best | rest] = result.deals
+      if orig_favorite.user_id == conn.assigns.current_user.id do
+        result = CheapSharkApi.game_deals_lookup(orig_favorite.gameID)
+        [best | rest] = result.deals
 
-      favorite =
-        Favorites.update_local_favorite_wrapper(
-          conn.assigns.current_user.email,
-          orig_favorite,
-          best
-        )
+        favorite =
+          Favorites.update_local_favorite_wrapper(
+            conn.assigns.current_user.email,
+            orig_favorite,
+            best
+          )
 
-      render(conn, :game, favorite: favorite, rest: rest)
-    else
-      conn
-      |> put_flash(:error, "That is not a valid ID")
-      |> redirect(to: ~p"/wishlist")
+        render(conn, :game, favorite: favorite, rest: rest)
+      else
+        conn
+        |> put_flash(:error, "That is not a valid ID")
+        |> redirect(to: ~p"/wishlist")
+      end
+    rescue
+      Ecto.NoResultsError ->
+        conn
+        |> put_flash(:error, "That is not a valid ID")
+        |> redirect(to: ~p"/wishlist")
     end
   end
 
