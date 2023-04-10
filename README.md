@@ -2,13 +2,13 @@
 
 ## Requirements
 
-Erlang/OTP 25
-Elixir 1.14.4
+Erlang/OTP 25  
+Elixir 1.14.4  
 PostgreSQL 14.7
 
 ## Local Installation
 
-Ensure that your Postgres database has a `postgres` superuser with `postgres` password.
+Ensure that your Postgres database has a `postgres` superuser with `postgres` password.  
 Ensure that there is a database named `media_wishlist_dev`
 
 To do a fresh installation run:
