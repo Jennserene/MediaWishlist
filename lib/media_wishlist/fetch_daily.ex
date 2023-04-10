@@ -30,9 +30,15 @@ defmodule MediaWishlist.FetchDaily do
   def fetch_for_subscribed_users() do
     Logger.info("Fetching pricing data for #{Accounts.num_subscribers()} subscribers.")
 
-    Accounts.list_subscribed_users()
-    |> Enum.each(fn user -> CheapSharkApi.fetch_all_for_user(user.id, user.email, true) end)
+    try do
+      Accounts.list_subscribed_users()
+      |> Enum.each(fn user -> CheapSharkApi.fetch_all_for_user(user.id, user.email, true) end)
 
-    Logger.info("Fetching completed. Next fetch for subscribers in 24 hours.")
+      Logger.info("Fetching completed. Next fetch for subscribers in 24 hours.")
+    rescue
+      err in RuntimeError ->
+        Logger.error("Something went wrong fetching for all subscribers!")
+        Logger.error(err.message)
+    end
   end
 end

@@ -168,5 +168,28 @@ defmodule MediaWishlistWeb.WishlistControllerTest do
         assert_called(CheapSharkApi.fetch_all_for_user(:_, :_))
       end
     end
+
+    test "fetches latest prices handles errors", %{conn: conn} do
+      conn = sign_up(conn)
+
+      conn =
+        with_mock HTTPoison,
+          get: fn _url ->
+            {:ok, %HTTPoison.Response{status_code: 200, body: deal_lookup_fetch_result()}}
+          end do
+          post(conn, ~p"/wishlist/new", %{"game" => %{"dealID" => "test_id"}})
+        end
+
+      with_mock CheapSharkApi,
+        fetch_all_for_user: fn _id, _email -> raise "This test error is working!" end do
+        conn = get(conn, ~p"/wishlist/fetch")
+        assert redirected_to(conn) == ~p"/wishlist"
+
+        assert Phoenix.Flash.get(conn.assigns.flash, :error) =~
+                 "Something went wrong fetching prices for"
+
+        assert_called(CheapSharkApi.fetch_all_for_user(:_, :_))
+      end
+    end
   end
 end

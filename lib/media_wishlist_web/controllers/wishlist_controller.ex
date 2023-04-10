@@ -94,13 +94,24 @@ defmodule MediaWishlistWeb.WishlistController do
     log_string = "Fetching latest prices for #{conn.assigns.current_user.email}'s wishlist"
     Logger.info(log_string)
 
-    CheapSharkApi.fetch_all_for_user(
-      conn.assigns.current_user.id,
-      conn.assigns.current_user.email
-    )
+    try do
+      CheapSharkApi.fetch_all_for_user(
+        conn.assigns.current_user.id,
+        conn.assigns.current_user.email
+      )
 
-    conn
-    |> put_flash(:info, log_string)
-    |> redirect(to: ~p"/wishlist")
+      conn
+      |> put_flash(:info, log_string)
+      |> redirect(to: ~p"/wishlist")
+    rescue
+      err in RuntimeError ->
+        error_string = "Something went wrong fetching prices for #{conn.assigns.current_user.email}"
+        Logger.error(error_string)
+        Logger.error(err.message)
+
+        conn
+        |> put_flash(:error, error_string)
+        |> redirect(to: ~p"/wishlist")
+    end
   end
 end

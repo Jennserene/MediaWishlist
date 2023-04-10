@@ -1,6 +1,6 @@
 <div class="flex flex-row mb-3 sm:mb-10">
   <div>
-    <img src={@best.thumb}>
+    <img class="w-auto" src={@best.thumb}>
   </div>
   <div class="ml-4">
     <h1 class="mb-4 text-2xl font-extrabold leading-none tracking-tight sm:text-4xl md:text-5xl lg:text-6xl">
@@ -26,7 +26,7 @@
           <% end %>
           at <%= @best.storeID %>
         </p>
-        <p>Normal retail price: $<%= @best.retailPrice %></p>
+        <p class="font-bold">Normal retail price: $<%= @best.retailPrice %></p>
       </div>
     <% else %>
       <p class="mb-2 text-xl sm:text-2xl font-semibold">This game is not on sale.</p>
