@@ -2,7 +2,7 @@
   <.max_height_table id="search_results" rows={@search_results} row_click={&JS.navigate(~p"/search/#{&1.gameID}")}>
     <:thumb :let={game}><img src={game.thumb} class="h-auto w-auto"></:thumb>
     <:col :let={game} label="Title"><%= game.external %></:col>
-    <:col :let={game} label="Cheapest Price"><%= game.cheapest %></:col>
+    <:col :let={game} label="Cheapest Price">$<%= game.cheapest %></:col>
     <:action :let={game}>
       <div class="flex flex-col items-center">
         <%= form_for @conn.params["game"] || %{}, ~p"/wishlist/new", [as: :game], fn f -> %>
@@ -14,8 +14,9 @@
           to: URI.parse("https://www.cheapshark.com/redirect?dealID=#{game.cheapestDealID}"),
           target: "_blank",
           rel: "noopener noreferrer",
-          class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded") %>
-      </div></:action>
+          class: "bg-purple-500 hover:bg-purple-700 text-white font-bold py-1 px-2 rounded") %>
+      </div>
+    </:action>
   </.max_height_table>
 <% end %>
 

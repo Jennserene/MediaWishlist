@@ -19,7 +19,7 @@ defmodule MediaWishlist.MixProject do
   def application do
     [
       mod: {MediaWishlist.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :logger_file_backend]
     ]
   end
 
@@ -53,6 +53,7 @@ defmodule MediaWishlist.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:httpoison, "~> 2.0"},
       {:poison, "~> 5.0"},
+      {:logger_file_backend, "~> 0.0.13"},
       {:mock, "~> 0.3.0", only: :test}
     ]
   end

@@ -52,6 +52,14 @@ config :tailwind,
   ]
 
 # Configures Elixir's Logger
+config :logger,
+  backends: [:console, {LoggerFileBackend, :error_log}]
+
+config :logger, :error_log,
+  path: "/log/info.log",
+  level: :debug,
+  format: "$date $time $metadata[$level] $message\n"
+
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]

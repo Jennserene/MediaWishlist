@@ -22,7 +22,7 @@ defmodule MediaWishlistWeb.SearchControllerTest do
         end do
         conn = post(conn, ~p"/search", %{"search" => %{"search_term" => "Batman"}})
         assert html_response(conn, 200) =~ "LEGO Batman"
-        assert html_response(conn, 200) =~ "16.05"
+        assert html_response(conn, 200) =~ "$16.05"
         assert html_response(conn, 200) =~ "Add"
         assert html_response(conn, 200) =~ "Buy"
       end
@@ -39,16 +39,16 @@ defmodule MediaWishlistWeb.SearchControllerTest do
         assert html_response(conn, 200) =~ "LEGO Batman"
         assert html_response(conn, 200) =~ "Add to Wishlist"
         assert html_response(conn, 200) =~ "This game is on sale!"
-        assert html_response(conn, 200) =~ "Get the latest deal for 16.05"
+        assert html_response(conn, 200) =~ "Get the latest deal for $16.05"
         assert html_response(conn, 200) =~ "Available"
         assert html_response(conn, 200) =~ "at Fanatical"
-        assert html_response(conn, 200) =~ "Normal retail price: 19.99"
+        assert html_response(conn, 200) =~ "Normal retail price: $19.99"
 
         assert html_response(conn, 200) =~
                  "Don't want to buy from Fanatical? Here are other options:"
 
         assert html_response(conn, 200) =~ "GameBillet"
-        assert html_response(conn, 200) =~ "16.79"
+        assert html_response(conn, 200) =~ "$16.79"
       end
     end
 

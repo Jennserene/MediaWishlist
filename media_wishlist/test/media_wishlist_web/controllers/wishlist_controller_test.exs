@@ -25,8 +25,8 @@ defmodule MediaWishlistWeb.WishlistControllerTest do
         assert html_response(conn, 200) =~ "Buy"
         assert html_response(conn, 200) =~ "Reviews"
         assert html_response(conn, 200) =~ "Delete"
-        assert html_response(conn, 200) =~ "59.99"
-        assert html_response(conn, 200) =~ "11.99"
+        assert html_response(conn, 200) =~ "$59.99"
+        assert html_response(conn, 200) =~ "$11.99"
       end
     end
 
@@ -110,16 +110,16 @@ defmodule MediaWishlistWeb.WishlistControllerTest do
         conn = get(conn, ~p"/wishlist/#{fav.id}")
         assert html_response(conn, 200) =~ "BioShock Infinite"
         assert html_response(conn, 200) =~ "This game is on sale!"
-        assert html_response(conn, 200) =~ "Get the latest deal for 5.39"
+        assert html_response(conn, 200) =~ "Get the latest deal for $5.39"
         assert html_response(conn, 200) =~ "Available"
         assert html_response(conn, 200) =~ "at GameBillet"
-        assert html_response(conn, 200) =~ "Normal retail price: 29.99"
+        assert html_response(conn, 200) =~ "Normal retail price: $29.99"
 
         assert html_response(conn, 200) =~
                  "Don't want to buy from GameBillet? Here are other options:"
 
         assert html_response(conn, 200) =~ "IndieGala"
-        assert html_response(conn, 200) =~ "5.49"
+        assert html_response(conn, 200) =~ "$5.49"
         assert html_response(conn, 200) =~ "Buy"
       end
     end

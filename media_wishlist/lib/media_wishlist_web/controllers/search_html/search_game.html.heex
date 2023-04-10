@@ -12,11 +12,11 @@
     <% end %>
     <%= if @best.onSale do %>
       <p class="mb-2 text-xl sm:text-2xl font-semibold">This game is on sale!</p>
-      <%= link("Get the latest deal for #{@best.currPrice}",
+      <%= link("Get the latest deal for $#{@best.currPrice}",
         to: URI.parse("https://www.cheapshark.com/redirect?dealID=#{@best.dealID}"),
         target: "_blank",
         rel: "noopener noreferrer",
-        class: "bg-blue-500 hover:bg-blue-700 text-sm sm:text-base text-white font-bold py-1 sm:py-2 px-2 sm:px-4 rounded whitespace-nowrap") %>
+        class: "bg-purple-500 hover:bg-purple-700 text-sm sm:text-base text-white font-bold py-1 sm:py-2 px-2 sm:px-4 rounded whitespace-nowrap") %>
       <div class="text-sm sm:text-base">
         <p class="mt-2">
           <%= if length(@rest) == 0 do %>
@@ -26,15 +26,15 @@
           <% end %>
           at <%= @best.storeID %>
         </p>
-        <p>Normal retail price: <%= @best.retailPrice %></p>
+        <p>Normal retail price: $<%= @best.retailPrice %></p>
       </div>
     <% else %>
       <p class="mb-2 text-xl sm:text-2xl font-semibold">This game is not on sale.</p>
-      <%= link("Get it for it's retail price of #{@best.retailPrice}",
+      <%= link("Get it for it's retail price of $#{@best.retailPrice}",
         to: URI.parse("https://www.cheapshark.com/redirect?dealID=#{@best.dealID}"),
         target: "_blank",
         rel: "noopener noreferrer",
-        class: "bg-blue-500 hover:bg-blue-700 text-sm sm:text-base text-white font-bold py-1 sm:py-2 px-2 sm:px-4 rounded whitespace-nowrap") %>
+        class: "bg-purple-500 hover:bg-purple-700 text-sm sm:text-base text-white font-bold py-1 sm:py-2 px-2 sm:px-4 rounded whitespace-nowrap") %>
       <div class="text-sm sm:text-base">
         <p class="mt-2">
           <%= if length(@rest) == 0 do %>
@@ -54,11 +54,11 @@
 
   <.table id="rest" rows={@rest}>
     <:col :let={deal} label="Store"><%= deal.storeID %></:col>
-    <:col :let={deal} label="Price"><%= deal.price %></:col>
+    <:col :let={deal} label="Price">$<%= deal.price %></:col>
     <:action :let={deal}><%= link("Buy",
       to: URI.parse("https://www.cheapshark.com/redirect?dealID=#{deal.dealID}"),
       target: "_blank",
       rel: "noopener noreferrer",
-      class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded") %></:action>
+      class: "bg-purple-500 hover:bg-purple-700 text-white font-bold py-1 px-2 rounded") %></:action>
   </.table>
 <% end %>

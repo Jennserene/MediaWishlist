@@ -65,6 +65,14 @@ config :media_wishlist, MediaWishlistWeb.Endpoint,
 # Enable dev routes for dashboard and mailbox
 config :media_wishlist, dev_routes: true
 
+config :logger,
+  backends: [:console, {LoggerFileBackend, :error_log}]
+
+config :logger, :error_log,
+  path: "/log/info.log",
+  level: :debug,
+  format: "$date $time $metadata[$level] $message\n"
+
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"
 
