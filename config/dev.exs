@@ -69,7 +69,7 @@ config :logger,
   backends: [:console, {LoggerFileBackend, :error_log}]
 
 config :logger, :error_log,
-  path: "/log/info.log",
+  path: "log/info.log",
   level: :debug,
   format: "$date $time $metadata[$level] $message\n"
 

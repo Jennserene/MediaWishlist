@@ -19,7 +19,7 @@ config :logger,
   backends: [:console, {LoggerFileBackend, :error_log}]
 
 config :logger, :error_log,
-  path: "/log/info.log",
+  path: "log/info.log",
   level: :info,
   format: "$date $time $metadata[$level] $message\n"
 
