@@ -1,5 +1,6 @@
 defmodule MediaWishlistWeb.SearchController do
   use MediaWishlistWeb, :controller
+  require Logger
 
   def start(conn, _params) do
     redirect(conn, to: ~p"/wishlist")
