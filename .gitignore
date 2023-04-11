@@ -42,3 +42,4 @@ fly.toml
 /backup/
 
 /log/
+/log/info.log

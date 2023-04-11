@@ -5,17 +5,28 @@ defmodule MediaWishlistWeb.WishlistController do
   alias MediaWishlist.Favorites
 
   def new(conn, %{"game" => %{"dealID" => dealID}}) do
-    result = CheapSharkApi.deal_lookup(dealID)
-    result = Map.put(result, :user_id, conn.assigns.current_user.id)
+    try do
+      result = CheapSharkApi.deal_lookup(dealID)
+      result = Map.put(result, :user_id, conn.assigns.current_user.id)
 
-    case check_for_duplicate_favorite(conn, result) do
-      true ->
+      case check_for_duplicate_favorite(conn, result) do
+        true ->
+          conn
+          |> put_flash(:error, "#{result.title} is already on your wishlist")
+          |> redirect(to: "/wishlist")
+
+        false ->
+          new_create(conn, result)
+      end
+    rescue
+      err in RuntimeError ->
+        error_string = "Something went wrong fetching new game information"
+        Logger.error(error_string)
+        Logger.error(err.message)
+
         conn
-        |> put_flash(:error, "#{result.title} is already on your wishlist")
-        |> redirect(to: "/wishlist")
-
-      false ->
-        new_create(conn, result)
+        |> put_flash(:error, error_string)
+        |> redirect(to: ~p"/wishlist")
     end
   end
 
@@ -52,7 +63,7 @@ defmodule MediaWishlistWeb.WishlistController do
     {:ok, _favorite} = Favorites.delete_favorite(favorite)
 
     log_string =
-      "Favorite #{favorite.title} deleted successfully from #{conn.assigns.current_user.email}'s wishlist."
+      "Favorite #{favorite.title} deleted successfully from #{conn.assigns.current_user.email}'s wishlist"
 
     Logger.info(log_string)
 
@@ -66,17 +77,28 @@ defmodule MediaWishlistWeb.WishlistController do
       orig_favorite = Favorites.get_favorite!(id)
 
       if orig_favorite.user_id == conn.assigns.current_user.id do
-        result = CheapSharkApi.game_deals_lookup(orig_favorite.gameID)
-        [best | rest] = result.deals
+        try do
+          result = CheapSharkApi.game_deals_lookup(orig_favorite.gameID)
+          [best | rest] = result.deals
 
-        favorite =
-          Favorites.update_local_favorite_wrapper(
-            conn.assigns.current_user.email,
-            orig_favorite,
-            best
-          )
+          favorite =
+            Favorites.update_local_favorite_wrapper(
+              conn.assigns.current_user.email,
+              orig_favorite,
+              best
+            )
 
-        render(conn, :game, favorite: favorite, rest: rest)
+          render(conn, :game, favorite: favorite, rest: rest)
+        rescue
+          err in RuntimeError ->
+            error_string = "Something went wrong fetching game deals for #{orig_favorite.title}"
+            Logger.error(error_string)
+            Logger.error(err.message)
+
+            conn
+            |> put_flash(:error, error_string)
+            |> redirect(to: ~p"/wishlist")
+        end
       else
         conn
         |> put_flash(:error, "That is not a valid ID")
@@ -105,7 +127,9 @@ defmodule MediaWishlistWeb.WishlistController do
       |> redirect(to: ~p"/wishlist")
     rescue
       err in RuntimeError ->
-        error_string = "Something went wrong fetching prices for #{conn.assigns.current_user.email}"
+        error_string =
+          "Something went wrong fetching prices for #{conn.assigns.current_user.email}"
+
         Logger.error(error_string)
         Logger.error(err.message)
 
